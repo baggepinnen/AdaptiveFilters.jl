@@ -12,7 +12,7 @@ yh = adaptive_filter(y, alg=OMAP; order=6, lr=0.25)
 This filters `y` with an adaptive AR (only poles) filter with specified order and returns `yh` which is the predicted output from an adaptive line enhancer (ALE). If your noise is wideband and signal narrowband, `yh` is your desired filtered signal. If the noise is narrowband and the signal is wideband, then `y-yh` is your desired filtered signal.
 
 Arguments:
-- `alg`: Stochastic approximation algorithm or weight function. Examples: `OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight`
+- `alg`: Stochastic approximation algorithm or weight function. Examples: `OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight`. `ExponentialWeight` corresponds to the recursive least-squares algorithm (RLS). `ADAM` corresponds *roughly* to the normalized least-mean squares (NLMS) algorithm. More options exist if OnlineStats is loaded.
 - `y`: Input signal
 - `order`: Filter order
 - `lr`: Learning rate or weight depending on `alg`
