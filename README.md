@@ -21,7 +21,7 @@ Arguments:
 
 ## Demo app
 ```julia
-using AdaptiveFilters, WAV, Plots, Interact
+using AdaptiveFilters, Plots, Interact
 inspectdr() # Preferred plotting backend for waveforms
 
 data = [sin.(1:100) .+ 0.1.*randn(100);
@@ -33,21 +33,22 @@ function app(req=nothing)
                     alg = [ExponentialWeight, MSPI, OMAP, OMAS, ADAM]
         y,yh = adaptive_filter(data, alg, order=order, lr=lr)
         e = y.-yh
-        plot([y yh], lab=["Signal" "Prediction"], layout=(2,1), show=false, sp=1)
-        plot!(e, lab="Filtered signal", sp=2, title="RMS: $(√mean(abs2, e))")
+        plot([y yh], lab=["Measured signal" "Prediction"], layout=(2,1), show=false, sp=1)
+        plot!(e, lab="Error", sp=2, title="RMS: $(√mean(abs2, e))")
     end
 end
 
 app()
 
 # Save filtered sound to disk
+using WAV
 y,yh = adaptive_filter(data, 4, 0.25, OMAP)
-filtered_signal = y.-yh
-wavwrite(filtered_signal, "filtered.wav"), Fs=fs)
+e = y.-yh
+wavwrite(e, "filtered.wav"), Fs=fs)
 ```
 ![window](figs/demo.svg)
 
-In the demo above, the narrowband signal is considered noise and the wideband Gaussian noise is considered signal.
+
 
 ## Internals
 This is a lightweight wrapper around functionality in [OnlineStats.jl](https://github.com/joshday/OnlineStats.jl) which does all the heavy lifting.
