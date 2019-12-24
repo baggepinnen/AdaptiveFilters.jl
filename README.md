@@ -17,6 +17,11 @@ Arguments:
 - `order`: Filter order
 - `lr`: Learning rate or weight depending on `alg`
 
+## Installation
+```
+using Pkg; Pkg.add(PackageSpec(url="https://github.com/baggepinnen/AdaptiveFilters.jl"))
+```
+
 
 
 ## Demo app
@@ -52,3 +57,20 @@ wavwrite(e, "filtered.wav"), Fs=fs)
 
 ## Internals
 This is a lightweight wrapper around functionality in [OnlineStats.jl](https://github.com/joshday/OnlineStats.jl) which does all the heavy lifting.
+
+## Usage from python
+1. First install Julia and install this package in Julia.
+2. Install [pyjulia](https://github.com/JuliaPy/pyjulia) using their instructions.
+3. Now the following should work
+
+```python
+$ python3
+>>> import julia
+>>> from julia import AdaptiveFilters
+>>> (yo,yh) = AdaptiveFilters.adaptive_filter(y)
+```
+if that fails, try replacing the first two lines with
+```python
+>>> from julia.api import Julia
+>>> jl = Julia(compiled_modules=False)
+```
