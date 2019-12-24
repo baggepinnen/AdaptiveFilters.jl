@@ -47,7 +47,7 @@ app()
 
 # Save filtered sound to disk
 using WAV
-y,yh = adaptive_filter(y, 4, 0.25, OMAP)
+yh = adaptive_filter(y, 4, 0.25, OMAP)
 e = y.-yh
 wavwrite(e, "filtered.wav"), Fs=fs)
 ```
