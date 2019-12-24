@@ -67,7 +67,7 @@ This is a lightweight wrapper around functionality in [OnlineStats.jl](https://g
 $ python3
 >>> import julia
 >>> from julia import AdaptiveFilters as af
->>> (yo,yh) = af.adaptive_filter(y)
+>>> yh = af.adaptive_filter(y)
 ```
 if that fails, try replacing the first line with
 ```python
