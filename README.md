@@ -69,7 +69,7 @@ $ python3
 >>> from julia import AdaptiveFilters
 >>> (yo,yh) = AdaptiveFilters.adaptive_filter(y)
 ```
-if that fails, try replacing the first two lines with
+if that fails, try replacing the first line with
 ```python
 >>> from julia.api import Julia
 >>> jl = Julia(compiled_modules=False)
