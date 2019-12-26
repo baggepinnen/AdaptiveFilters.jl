@@ -7,7 +7,7 @@
 Simple adaptive AR filters. We export a single function:
 
 ```julia
-yh = adaptive_filter(y, alg=OMAP; order=6, lr=0.25)
+yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.25)
 ```
 This filters `y` with an adaptive AR (only poles) filter with specified order and returns `yh` which is the predicted output from an adaptive line enhancer (ALE). If your noise is wideband and signal narrowband, `yh` is your desired filtered signal. If the noise is narrowband and the signal is wideband, then `y-yh` is your desired filtered signal.
 
@@ -34,7 +34,7 @@ y = [sin.(1:100) .+ 0.1.*randn(100);
 
 function app(req=nothing)
     @manipulate for order = 2:2:10,
-                    lr = LinRange(0.1, 0.9, 40),
+                    lr = LinRange(0.01, 0.99, 100),
                     alg = [ExponentialWeight, MSPI, OMAP, OMAS, ADAM]
         yh = adaptive_filter(y, alg, order=order, lr=lr)
         e = y.-yh

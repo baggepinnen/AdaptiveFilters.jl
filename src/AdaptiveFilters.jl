@@ -5,7 +5,7 @@ export adaptive_filter, OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight
 
 
 """
-    yh = adaptive_filter(y, alg=OMAP; order=6, lr=0.25)
+    yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.25)
 
 Filters `y` with an adaptive AR (only poles) filter with specified order.
 Returns `yh` which is the predicted output from an adaptive line enhancer (ALE). If your noise is wideband and signal narrowband, `yh` is your desired filtered signal. If the noise is narrowband and the signal is wideband, then `y-yh` is your desired filtered signal.
@@ -18,7 +18,7 @@ The first `order` samples of `yh` will be copies of `y`. The signals will thus h
 - `order`: Filter order
 - `lr`: Learning rate or weight depending on `alg`
 """
-function adaptive_filter(y, alg::Type{<:OnlineStats.Algorithm}=OMAP; order=6, lr=0.25)
+function adaptive_filter(y, alg::Type{<:OnlineStats.Algorithm}=MSPI; order=4, lr=0.1)
     T = length(y)
     model = StatLearn(order, alg(), rate=LearningRate(lr))
     yh = similar(y)
