@@ -4,7 +4,7 @@
 [![Coverage](https://codecov.io/gh/baggepinnen/AdaptiveFilters.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/baggepinnen/AdaptiveFilters.jl)
 
 
-Simple adaptive AR filters. We export a single function:
+Simple adaptive AR filters. We export two functions:
 
 ```julia
 yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.1)
@@ -16,6 +16,12 @@ Arguments:
 - `y`: Input signal
 - `order`: Filter order
 - `lr`: Learning rate or weight depending on `alg`
+
+The function
+```julia
+focused_adaptive_filter(y, band, fs, args...; kwargs...)
+```
+allows you to specify a frequency band (tuple) in which to focus the attention of the adaptive filter. `fs` here denotes the sample rate, e.g., 44100Hz.
 
 ## Installation
 ```julia
@@ -78,4 +84,10 @@ if that fails, try replacing the first line with
 Keyword args etc. work as normal
 ```python
 af.adaptive_filter(y, af.ADAM, order=2)
+```
+
+## Example: Adaptive cicada filtering
+The following function does a reasonable job at filtering out the sound of cicadas from an audio recording
+```julia
+cicada_filter(y,fs,args...; kwargs...) = y-focused_adaptive_filter(data,(4200,11000),fs,args...; kwargs...)
 ```

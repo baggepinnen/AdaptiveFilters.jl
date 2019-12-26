@@ -1,7 +1,7 @@
 module AdaptiveFilters
-using OnlineStats
+using OnlineStats, DSP
 
-export adaptive_filter, OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight
+export adaptive_filter, focused_adaptive_filter, OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight
 
 
 """
@@ -49,4 +49,24 @@ function adaptive_filter(y, alg::Type{<:OnlineStats.Weight}; order=6, lr=0.2)
     yh
 end
 
+"""
+    focused_adaptive_filter(y, band, fs, args...; kwargs...)
+
+An adaptive filter that focuses its attention to a specific frequency range.
+
+#Arguments:
+- `y`: Input signal
+- `band`: Frequency band typle
+- `fs`: Sample rate, e.g., 44100
+- `args`: Passed through to `adaptive_filter`
+- `kwargs`: Passed through to `adaptive_filter`
+"""
+function focused_adaptive_filter(y,band,fs,args...; kwargs...)
+    dm = Butterworth(3)
+    rt = Bandpass(band...,fs=fs)
+    f = digitalfilter(rt, dm)
+    yh = filt(f, reverse(y))
+    yh = filt(f, reverse(yh))
+    yh = adaptive_filter(yh, args...; kwargs...)
+    yh
 end
