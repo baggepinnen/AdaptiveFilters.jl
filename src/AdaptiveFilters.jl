@@ -70,3 +70,5 @@ function focused_adaptive_filter(y,band,fs,args...; kwargs...)
     yh = adaptive_filter(yh, args...; kwargs...)
     yh
 end
+
+end
