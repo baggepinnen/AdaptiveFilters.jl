@@ -5,7 +5,7 @@ export adaptive_filter, OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight
 
 
 """
-    yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.25)
+    yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.1)
 
 Filters `y` with an adaptive AR (only poles) filter with specified order.
 Returns `yh` which is the predicted output from an adaptive line enhancer (ALE). If your noise is wideband and signal narrowband, `yh` is your desired filtered signal. If the noise is narrowband and the signal is wideband, then `y-yh` is your desired filtered signal.
