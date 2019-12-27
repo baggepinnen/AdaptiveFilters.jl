@@ -25,7 +25,7 @@ allows you to specify a frequency band (tuple) in which to focus the attention o
 
 ## Installation
 ```julia
-using Pkg; Pkg.add(PackageSpec(url="https://github.com/baggepinnen/AdaptiveFilters.jl"))
+using Pkg; Pkg.add("AdaptiveFilters")
 ```
 
 
