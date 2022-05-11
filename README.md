@@ -1,6 +1,6 @@
 # AdaptiveFilters
 
-[![Build Status](https://travis-ci.org/baggepinnen/AdaptiveFilters.jl.svg?branch=master)](https://travis-ci.org/baggepinnen/AdaptiveFilters.jl)
+[![CI](https://github.com/baggepinnen/AdaptiveFilters.jl/workflows/CI/badge.svg)](https://github.com/baggepinnen/AdaptiveFilters.jl/actions)
 [![Coverage](https://codecov.io/gh/baggepinnen/AdaptiveFilters.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/baggepinnen/AdaptiveFilters.jl)
 
 
