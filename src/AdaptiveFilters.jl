@@ -87,7 +87,8 @@ Create an `NLMS` FIR-filter with `n` coefficients (filter taps) and learning rat
 The type of `μ` determines the numeric type used by the filter.
 
 Call the filter object like a function `ŷ, e = f(x, d)` where `x` is the input and `d` is the desired output.
-To create an adaptive line enhancer (ALE), set ``d[k] = x[k-Δ]`` where ``Δ`` is a positive integer delay, like 1.
+
+To create an adaptive line enhancer (ALE), set ``x[k] = d[k-Δ]`` where ``Δ`` is a positive integer delay, chosen sufficiently large to make the noise uncorrelated to the input. For white noise, ``Δ = 1`` is thus sufficient, but for colored noise, ``Δ`` should be chosen larger.
 """
 function NLMS(n::Int, μ::T) where T
     NLMS(zeros(T, n), zeros(T, n), μ, Base.RefValue(0))
