@@ -1,7 +1,7 @@
 name = "AdaptiveFilters"
 uuid = "c4f366c8-f60d-49ea-b3e5-386989159d04"
 authors = ["Fredrik Bagge Carlson"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
