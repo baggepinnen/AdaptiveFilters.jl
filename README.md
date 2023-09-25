@@ -55,9 +55,49 @@ app()
 using WAV
 yh = adaptive_filter(y, 4, 0.25, OMAP)
 e = y.-yh
-wavwrite(e, "filtered.wav"), Fs=fs)
+wavwrite(e, "filtered.wav", Fs=fs)
 ```
 ![window](figs/demo.svg)
+
+## NLMS
+A normalized least-mean squares (NLMS) filter can be created like
+```julia
+using AdaptiveFilters, Random
+N = 60   # Number of filter taps 
+μ = 0.01 # Learning rate
+f = NLMS(N, μ)
+```
+
+This filter can then be called like
+```
+ŷ, e = f(x, d)
+```
+where `x` is the input signal, `d` is the desired signal and `ŷ` is the filtered signal. The error `e` is also returned. This call modifies the internal state of `f`.
+
+## Adaptive line enhancer
+The NLMS filter can be used to build an adaptive line enhancer (ALE) by letting the input signal be the desired signal delayed by a number of samples ``Δ``:
+
+```julia
+Random.seed!(0)
+y = sin.(0:0.1:100)
+yn = y + 0.1*randn(length(y)) # A sinusoid with noise
+
+
+T = length(y)
+YH = zeros(T)
+E = zeros(T)
+
+Δ = 1 # Delay in samples
+
+for i = eachindex(y)
+    YH[i], E[i] = f(yn[max(i-Δ, 1)], yn[i])
+end
+
+using Plots, Test
+@test mean(abs2, y[end-100:end] - YH[end-100:end]) < 1e-3
+plot([y yn YH E y-YH], lab=["y" "yn" "yh" "e" "y-yh"])
+```
+
 
 
 
