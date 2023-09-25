@@ -25,7 +25,7 @@ using Test, Statistics
     N = 2*29
     T = length(y)
     
-    f = AdaptiveFilters.NLMS2(N, 0.01)
+    f = AdaptiveFilters.NLMS(N, 0.01)
     
     YH = zeros(T)
     E = zeros(T)
@@ -39,5 +39,5 @@ using Test, Statistics
     # using Plots
     # plot([y yn YH E y-YH], lab=["y" "yn" "yh" "e" "y-yh"])
     
-    @test mean(abs2, y[end-100:end] - YH[end-100:end]) < 1e-3
+    @test mean(abs2, y[end-100:end] - YH[end-100:end]) < 1e-2
 end

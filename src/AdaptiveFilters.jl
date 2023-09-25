@@ -1,5 +1,6 @@
 module AdaptiveFilters
 using OnlineStats, DSP
+using OnlineStats: l2regloss
 
 export adaptive_filter, focused_adaptive_filter, OMAP, MSPI, OMAS, ADAM, ExponentialWeight, EqualWeight, NLMS
 
