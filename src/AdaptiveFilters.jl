@@ -6,7 +6,7 @@ export adaptive_filter, focused_adaptive_filter, OMAP, MSPI, OMAS, ADAM, Exponen
 
 
 """
-    yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.1)
+    yh = adaptive_filter(y, alg=MSPI; order=4, lr=0.1, delta=1)
 
 Filters `y` with an adaptive AR (only poles) filter with specified order.
 Returns `yh` which is the predicted output from an adaptive line enhancer (ALE). If your noise is wideband and signal narrowband, `yh` is your desired filtered signal. If the noise is narrowband and the signal is wideband, then `y-yh` is your desired filtered signal.
@@ -18,33 +18,34 @@ The first `order` samples of `yh` will be copies of `y`. The signals will thus h
 - `y`: Input signal
 - `order`: Filter order
 - `lr`: Learning rate or weight depending on `alg`
+- `delta`: Delay of the adaptive line enhancer (ALE). The filter tries to predict the desired input signal `delta` steps into the future. Select `delta` large enough to make the input and noise uncorrelated. For white noise, `delta=1` is sufficient, but for colored noise, `delta` should be chosen larger.
 """
-function adaptive_filter(y, alg::Type{<:OnlineStats.Algorithm}=MSPI, loss::Function=l2regloss; order=4, lr=0.1, kwargs...)
+function adaptive_filter(y, alg::Type{<:OnlineStats.Algorithm}=MSPI, loss::Function=l2regloss; order=4, lr=0.1, delta=1, kwargs...)
     T = length(y)
     model = StatLearn(loss, order, alg(); rate=LearningRate(lr), kwargs...)
     yh = similar(y)
-    yh[1:order] = y[1:order]
-    for t in 1:T-order
+    yh[1:order+delta-1] = y[1:order+delta-1]
+    for t in 1:T-order-delta+1
         x = @view(y[t:t+order-1])
-        o  = fit!(model, (x, y[t+order]))
-        yh[t+order] = OnlineStats.predict(o, x)
+        o  = fit!(model, (x, y[t+order+delta-1]))
+        yh[t+order+delta-1] = OnlineStats.predict(o, x)
     end
     yh
 end
 
-function adaptive_filter(y, alg::Type{<:OnlineStats.Weight}; order=6, lr=0.2)
+function adaptive_filter(y, alg::Type{<:OnlineStats.Weight}; order=6, lr=0.2, delta=1)
     T = length(y)
     model = LinReg(weight=alg(lr))
     yh = similar(y)
-    yh[1:order] = y[1:order]
-    for t in 1:T-order
+    yh[1:order+delta-1] = y[1:order+delta-1]
+    for t in 1:T-order-delta+1
         x = @view(y[t:t+order-1])
-        o  = fit!(model, (x, y[t+order]))
-        if t > order
+        fit!(model, (x, y[t+order+delta-1]))
+        if t > order+delta-1
             value(model)
-            yh[t+order] = OnlineStats.predict(model, x)
+            yh[t+order+delta-1] = OnlineStats.predict(model, x)
         else
-            yh[t+order] = y[t]
+            yh[t+order+delta-1] = y[t]
         end
     end
     yh
